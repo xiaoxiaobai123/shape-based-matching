@@ -202,6 +202,44 @@ namespace shape_based_matching
 
         }
 
+        private void meanImage_Checked(object sender, RoutedEventArgs e)
+        {
+            if(meanImage.IsChecked == true)
+            {
+               
+                ComboBoxItem selectedItem = (ComboBoxItem)(MeanImageMaskValue.SelectedValue);
+                int MaskWidth = Convert.ToInt32(selectedItem.Content);
+                int MaskHeight = Convert.ToInt32(selectedItem.Content);
+                HObject Ho_meanImage =   HD.MeanImage(HalconPic, ProcessingPic.HalconWindow, MaskWidth, MaskHeight);
+                HOperatorSet.DispObj(Ho_meanImage, ProcessingPic.HalconWindow);
+            }
+        }
+
+        private void medianImage_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void smoothImage_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void binomialfilter_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void sigmaImage_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void gaussfilter_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         protected int HDrawingObjectCallback(long draw_id, long window_handle, IntPtr type)
         {
             // On callback, process and display image

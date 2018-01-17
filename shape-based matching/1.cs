@@ -766,6 +766,17 @@ public partial class HDevelopExport
         return Ho_Image;
     }
 
+    public HObject MeanImage(HObject Ho_Image,HTuple HalconWindow,int MaskWidth,int MaskHeight)
+    {
+        if (Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+        HOperatorSet.MeanImage(Ho_Image, out Ho_Image, MaskWidth, MaskHeight);
+      //  HOperatorSet.DispObj(Ho_Image, HalconWindow);
+        return Ho_Image;
+    }
 
 }
 

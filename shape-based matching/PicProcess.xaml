@@ -20,9 +20,9 @@
             <MenuItem Header="clear all objects" Click="OnClearAllObjects_Click"/>
         </ContextMenu>
     </Window.Resources>
-    
+
     <DockPanel>
-           
+
         <GroupBox Header="Operation" DockPanel.Dock="Top">
             <StackPanel>
                 <Controls:RangeSlider x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
@@ -43,30 +43,147 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Grid.Column="0" Header="LookUp Table">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <RadioButton x:Name="Inverse" Content="Inverse" Grid.Column="0" Grid.Row="0" Checked="Inverse_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="sqr" Content="sqr" Grid.Column="0" Grid.Row="1" Checked="sqr_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="inv_sqr" Content="inv_sqr" Grid.Column="0" Grid.Row="2" Checked="inv_sqr_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="cube" Content="cube" Grid.Column="0" Grid.Row="3" Checked="cube_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="inv_cube" Content="inv_cube" Grid.Column="0" Grid.Row="4" Checked="inv_cube_Checked" Margin="0,0,0,0"/>
-                            <RadioButton x:Name="sqrt" Content="sqrt" Grid.Column="1" Grid.Row="0" Checked="sqrt_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="inv_sqrt" Content="inv_sqrt" Grid.Column="1" Grid.Row="1" Checked="inv_sqrt_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="cubic_root" Content="cubic_root" Grid.Column="1" Grid.Row="2" Checked="cubic_root_Checked" Margin="0,0,0,5"/>
-                            <RadioButton x:Name="inv_cubic_root" Content="inv_cubic_root" Grid.Column="1" Grid.Row="3" Checked="inv_cubic_root_Checked" Margin="0,0,0,0"/>
-                            <RadioButton x:Name="default" Content="default" Grid.Column="1" Grid.Row="4" Checked="default_Checked" Margin="0,0,0,0"/>
-                        </Grid>
+                    <GroupBox Grid.Column="0" Header="Smoothing">
+                        <ScrollViewer HorizontalScrollBarVisibility="Visible">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <RadioButton x:Name="meanImage" Content="meanImage" Grid.Column="0" Grid.Row="0" Checked="meanImage_Checked"/>
+                                <Label Content ="maskValue:" Grid.Column="1" Grid.Row="0"/>
+                                <ComboBox x:Name="MeanImageMaskValue" Grid.Column="2" Grid.Row="0" SelectedIndex="1">
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="15"/>
+                                    <ComboBoxItem Content="23"/>
+                                    <ComboBoxItem Content="31"/>
+                                    <ComboBoxItem Content="43"/>
+                                </ComboBox>
+
+                                <RadioButton x:Name="medianImage" Content="medianImage" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                <Label x:Name="MaskType" Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                <ComboBox Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                    <ComboBoxItem Content="circle"/>
+                                    <ComboBoxItem Content="square"/>
+                                </ComboBox>
+                                <Label x:Name="Radius" Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                <ComboBox Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                    <ComboBoxItem Content="1"/>
+                                    <ComboBoxItem Content="2"/>
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="4"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="6"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="8"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="10"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="12"/>
+                                    <ComboBoxItem Content="13"/>
+                                    <ComboBoxItem Content="14"/>
+                                    <ComboBoxItem Content="15"/>
+                                </ComboBox>
+
+
+                                <RadioButton x:Name="smoothImage" Content="smoothImage" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                <Label x:Name="Filter" Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                <ComboBox Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                    <ComboBoxItem Content="deriche1"/>
+                                    <ComboBoxItem Content="deriche2"/>
+                                    <ComboBoxItem Content="gauss"/>
+                                    <ComboBoxItem Content="shen"/>
+                                </ComboBox>
+                                <Label x:Name="Alpha" Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                <ComboBox Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                    <ComboBoxItem Content="0.1"/>
+                                    <ComboBoxItem Content="0.2"/>
+                                    <ComboBoxItem Content="0.3"/>
+                                    <ComboBoxItem Content="0.5"/>
+                                    <ComboBoxItem Content="1.0"/>
+                                    <ComboBoxItem Content="1.5"/>
+                                    <ComboBoxItem Content="2.0"/>
+                                    <ComboBoxItem Content="2.5"/>
+                                    <ComboBoxItem Content="3.0"/>
+                                    <ComboBoxItem Content="4.0"/>
+                                    <ComboBoxItem Content="5.0"/>
+                                    <ComboBoxItem Content="7.0"/>
+                                    <ComboBoxItem Content="10.0"/>
+                                </ComboBox>
+
+                                <RadioButton x:Name="binomialfilter" Content="binomialfilter" Grid.Column="0" Grid.Row="3" Checked="binomialfilter_Checked" />
+                                <Label x:Name="MaskValue" Content="MaskValue:" Grid.Column="1" Grid.Row="3"  />
+                                <ComboBox Grid.Column="2" Grid.Row="3" SelectedIndex="0">
+                                    <ComboBoxItem Content="1"/>
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="13"/>
+                                    <ComboBoxItem Content="15"/>
+                                    <ComboBoxItem Content="17"/>
+                                    <ComboBoxItem Content="19"/>
+                                    <ComboBoxItem Content="21"/>
+                                    <ComboBoxItem Content="23"/>
+                                    <ComboBoxItem Content="25"/>
+                                    <ComboBoxItem Content="27"/>
+                                    <ComboBoxItem Content="29"/>
+                                    <ComboBoxItem Content="31"/>
+                                </ComboBox>
+
+                                <RadioButton x:Name="sigmaImage" Content="sigmaImage" Grid.Column="0" Grid.Row="4" Checked="sigmaImage_Checked" />
+                                <Label x:Name="sigmaMaskValue" Content="sigmaMaskValue:" Grid.Column="1" Grid.Row="4"  />
+                                <ComboBox Grid.Column="2" Grid.Row="4" SelectedIndex="1">
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="13"/>
+                                    <ComboBoxItem Content="15"/>
+                                </ComboBox>
+
+                                <Label x:Name="SigmaValue" Content="SigmaValue:" Grid.Column="3" Grid.Row="4"  />
+                                <ComboBox Grid.Column="4" Grid.Row="4" SelectedIndex="0">
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="11"/>
+                                    <ComboBoxItem Content="13"/>
+                                    <ComboBoxItem Content="15"/>
+                                </ComboBox>
+
+                                <RadioButton x:Name="gaussfilter" Content="gaussfilter" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                <Label   Content="size:" Grid.Column="1" Grid.Row="5"  />
+                                <ComboBox Grid.Column="2" Grid.Row="5" SelectedIndex="1">
+                                    <ComboBoxItem Content="3"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="7"/>
+                                    <ComboBoxItem Content="9"/>
+                                    <ComboBoxItem Content="11"/>
+                                </ComboBox>
+                            </Grid>
+
+
+                        </ScrollViewer>
                     </GroupBox>
 
 
@@ -105,5 +222,5 @@
 
 
     </DockPanel>
-     
+
 </Window>

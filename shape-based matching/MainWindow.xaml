@@ -125,7 +125,7 @@
 
                     <StackPanel>
                    
-                        <!--<Controls:RangeSlider x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>-->
+                        <Controls:RangeSlider x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>

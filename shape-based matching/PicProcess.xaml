@@ -56,7 +56,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <!--<RadioButton x:Name="Inverse" Content="Inverse" Grid.Column="0" Grid.Row="0" Checked="Inverse_Checked" Margin="0,0,0,5"/>
+                            <RadioButton x:Name="Inverse" Content="Inverse" Grid.Column="0" Grid.Row="0" Checked="Inverse_Checked" Margin="0,0,0,5"/>
                             <RadioButton x:Name="sqr" Content="sqr" Grid.Column="0" Grid.Row="1" Checked="sqr_Checked" Margin="0,0,0,5"/>
                             <RadioButton x:Name="inv_sqr" Content="inv_sqr" Grid.Column="0" Grid.Row="2" Checked="inv_sqr_Checked" Margin="0,0,0,5"/>
                             <RadioButton x:Name="cube" Content="cube" Grid.Column="0" Grid.Row="3" Checked="cube_Checked" Margin="0,0,0,5"/>
@@ -65,7 +65,7 @@
                             <RadioButton x:Name="inv_sqrt" Content="inv_sqrt" Grid.Column="1" Grid.Row="1" Checked="inv_sqrt_Checked" Margin="0,0,0,5"/>
                             <RadioButton x:Name="cubic_root" Content="cubic_root" Grid.Column="1" Grid.Row="2" Checked="cubic_root_Checked" Margin="0,0,0,5"/>
                             <RadioButton x:Name="inv_cubic_root" Content="inv_cubic_root" Grid.Column="1" Grid.Row="3" Checked="inv_cubic_root_Checked" Margin="0,0,0,0"/>
-                            <RadioButton x:Name="default" Content="default" Grid.Column="1" Grid.Row="4" Checked="default_Checked" Margin="0,0,0,0"/>-->
+                            <RadioButton x:Name="default" Content="default" Grid.Column="1" Grid.Row="4" Checked="default_Checked" Margin="0,0,0,0"/>
                         </Grid>
                     </GroupBox>
 

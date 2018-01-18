@@ -92,6 +92,7 @@ namespace shape_based_matching
                 ImagePath = openFileDialog1.FileName;
                 
                 background_image = HD.readImage(HwindowShow.HalconWindow, ImagePath);
+                HOperatorSet.Rgb1ToGray(background_image, out background_image);
                 if (background_image == null)
                     return;
                 if (ReadFilterfc.binomialfilterState == true)
@@ -839,6 +840,7 @@ namespace shape_based_matching
                 background_image = HD.readImage(OriginalPicture.HalconWindow, ImagePath);
                 if (background_image == null)
                     return;
+                HOperatorSet.DispObj(background_image, OriginalPicture.HalconWindow);
             }
             else
             {

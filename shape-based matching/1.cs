@@ -311,6 +311,9 @@ public partial class HDevelopExport
             try
             {
                 ho_ModelContours.Dispose();
+                HOperatorSet.SetColor(hv_WindowHandle, "blue");
+                HOperatorSet.SetLineWidth(hv_WindowHandle, 1);
+
                 HOperatorSet.GetShapeModelContours(out ho_ModelContours, hv_ModelId, 1);
 
                 HOperatorSet.HomMat2dIdentity(out hv_HomMat);
@@ -321,8 +324,8 @@ public partial class HDevelopExport
 
                 HOperatorSet.AffineTransContourXld(ho_ModelContours, out ho_TransContours, hv_HomMat);
 
-                //HOperatorSet.SetColor(hv_ExpDefaultWinHandle, "white");
-                //HOperatorSet.SetLineWidth(hv_ExpDefaultWinHandle, 1);
+                
+              
 
                 HOperatorSet.SetWindowParam(hv_WindowHandle, "flush", "false");               
                 HOperatorSet.ClearWindow(hv_WindowHandle);
@@ -564,7 +567,7 @@ public partial class HDevelopExport
         //HOperatorSet.SetColor(hv_ExpDefaultWinHandle, "blue");
         //HOperatorSet.SetDraw(hv_ExpDefaultWinHandle, "margin");
 
-        HOperatorSet.DispObj(ho_Dog, hv_ExpDefaultWinHandle);
+     //   HOperatorSet.DispObj(ho_Dog, hv_ExpDefaultWinHandle);
  
         return ho_Dog;
  }

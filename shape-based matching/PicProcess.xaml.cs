@@ -15,6 +15,9 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
+using System.Xml.Serialization;
+using System.IO;
+
 namespace shape_based_matching
 {
     /// <summary>
@@ -22,6 +25,9 @@ namespace shape_based_matching
     /// </summary>
     public partial class PicProcess : Window
     {
+        XmlSerializer xs;
+        HObject Global_ProcessingPic = new HObject();
+        HObject EmphasizePicture = new HObject();
         HTuple hv_Width, hv_Height;
 
         HTuple hv_ModelId;
@@ -31,6 +37,31 @@ namespace shape_based_matching
         List<HTuple> drawing_objects;
         HDevelopExport HD = new HDevelopExport();
         object image_lock = new object();
+
+        FilterfunctionState Filterfc = new FilterfunctionState
+        {
+            meanImageState = false,
+            meanImagemaskValue = 5,
+
+            medianImageState = false,
+            medianImagemasktype = "circle",
+            medianImageradiusvalue = 1,
+
+            smoothImageState = false,
+            smoothImagefiltertype = "derich1",
+            smoothImagealpha = 0.5,
+
+            binomialfilterState = false,
+            binomialfiltermaskvalue = 1,
+
+            sigmaImageState = false,
+            sigmaImagemaskValue = 5,
+            sigmaImagesigmaValue =3,
+
+            gaussFilterState = false,
+            gaussFiltersize = 5
+        };
+
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -42,6 +73,8 @@ namespace shape_based_matching
             HOperatorSet.SetPart(ProcessingPic.HalconWindow, 0, 0, hv_Height - 1, hv_Width - 1);
             HOperatorSet.DispObj(HalconPic, OriginPic.HalconWindow);
             HOperatorSet.DispObj(HalconPic, ProcessingPic.HalconWindow);
+
+            Global_ProcessingPic = HalconPic;
             ProcessingPic.HalconWindow.AttachBackgroundToWindow(new HImage(HalconPic));
 
             MeanImageMaskValue.SelectionChanged += MeanImageMaskValue_SelectionChanged;
@@ -53,6 +86,14 @@ namespace shape_based_matching
             sigmaImagesigmaMaskValue.SelectionChanged += sigmaImagesigmaMaskValue_SelectionChanged;
             sigmaImageSigmaValue.SelectionChanged += sigmaImageSigmaValue_SelectionChanged;
             gaussfiltersize.SelectionChanged += gaussfiltersize_SelectionChanged;
+
+            xs = new XmlSerializer(typeof(FilterfunctionState));
+            FileStream fs = new FileStream("Config.xml", FileMode.Create, FileAccess.Write);
+   
+            xs.Serialize(fs, Filterfc);
+        
+            fs.Close();
+
         }
 
         private void gaussfiltersize_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -205,7 +246,16 @@ namespace shape_based_matching
 
         private void Emphasize_Checked(object sender, RoutedEventArgs e)
         {
-            HD.Emphsize();
+            if (Emphasize.IsChecked == true)
+            {
+                EmphasizePicture = Global_ProcessingPic;
+                Global_ProcessingPic = HD.Emphsize(EmphasizePicture, ProcessingPic.HalconWindow);
+            }
+            else
+            {
+                Global_ProcessingPic = EmphasizePicture;
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
+            }
         }
 
         private void ProcessingPic_HMouseDown(object sender, HSmartWindowControlWPF.HMouseEventArgsWPF e)
@@ -242,6 +292,45 @@ namespace shape_based_matching
                 MessageBox.Show("请先制作模板");
                 return;
             }
+            Filterfc.binomialfilterState = binomialfilter.IsChecked ?? false;
+            ComboBoxItem binomialfilterMaskValue_selectedItem = (ComboBoxItem)(binomialfilterMaskValue.SelectedValue);
+            Filterfc.binomialfiltermaskvalue = Convert.ToInt32(binomialfilterMaskValue_selectedItem.Content);
+             
+            
+            
+            ComboBoxItem gaussfiltersize_selectedItem = (ComboBoxItem)(gaussfiltersize.SelectedValue);
+            Filterfc.gaussFiltersize = Convert.ToInt32(gaussfiltersize_selectedItem.Content);
+            Filterfc.gaussFilterState = gaussfilter.IsChecked ?? false;
+
+            ComboBoxItem selectedItem = (ComboBoxItem)(MeanImageMaskValue.SelectedValue);
+            Filterfc.meanImagemaskValue = Convert.ToInt32(selectedItem.Content);
+            Filterfc.meanImageState = meanImage.IsChecked ?? false;
+
+            ComboBoxItem MaskType_selectedItem = (ComboBoxItem)(medianImageMaskType.SelectedValue);
+            ComboBoxItem Radius_selectedItem = (ComboBoxItem)(medianImageRadius.SelectedValue);
+            Filterfc.medianImagemasktype = (MaskType_selectedItem.Content).ToString();
+            Filterfc.medianImageradiusvalue = Convert.ToInt32(Radius_selectedItem.Content);           
+            Filterfc.medianImageState = medianImage.IsChecked ?? false;
+
+            ComboBoxItem sigmaImagesigmaMaskValue_selectedItem = (ComboBoxItem)(sigmaImagesigmaMaskValue.SelectedValue);
+            ComboBoxItem sigmaImageSigmaValue_selectedItem = (ComboBoxItem)(sigmaImageSigmaValue.SelectedValue);
+            Filterfc.sigmaImagemaskValue = Convert.ToInt32(sigmaImagesigmaMaskValue_selectedItem.Content);
+            Filterfc.sigmaImagesigmaValue = Convert.ToInt32(sigmaImageSigmaValue_selectedItem.Content);                    
+            Filterfc.sigmaImageState = sigmaImage.IsChecked ?? false;
+
+
+            ComboBoxItem smoothImageFilter_selectedItem = (ComboBoxItem)(smoothImageFilter.SelectedValue);
+            ComboBoxItem smoothImageAlpha_selectedItem = (ComboBoxItem)(smoothImageAlpha.SelectedValue);
+            Filterfc.smoothImagefiltertype = smoothImageFilter_selectedItem.Content.ToString();
+            Filterfc.smoothImagealpha = Convert.ToDouble(smoothImageAlpha_selectedItem.Content);
+            Filterfc.smoothImageState = smoothImage.IsChecked ?? false;
+
+            xs = new XmlSerializer(typeof(FilterfunctionState));
+            FileStream fs = new FileStream("Config.xml", FileMode.Create, FileAccess.Write);
+
+            xs.Serialize(fs, Filterfc);
+            fs.Close();
+
             HOperatorSet.WriteShapeModel(hv_ModelId, "MoudleSaved.shm");
             MessageBox.Show("保存成功！");
 
@@ -249,7 +338,9 @@ namespace shape_based_matching
 
         private void RecoverToDefaultPic_Checked(object sender, RoutedEventArgs e)
         {
-
+            
+      //      Global_ProcessingPic = HalconPic;
+      //      HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
         }
 
         private void meanImage_Checked(object sender, RoutedEventArgs e)
@@ -260,8 +351,8 @@ namespace shape_based_matching
                 ComboBoxItem selectedItem = (ComboBoxItem)(MeanImageMaskValue.SelectedValue);
                 int MaskWidth = Convert.ToInt32(selectedItem.Content);
                 int MaskHeight = Convert.ToInt32(selectedItem.Content);
-                HObject Ho_meanImage =   HD.MeanImage(HalconPic, ProcessingPic.HalconWindow, MaskWidth, MaskHeight);
-                HOperatorSet.DispObj(Ho_meanImage, ProcessingPic.HalconWindow);
+                Global_ProcessingPic =   HD.MeanImage(HalconPic, ProcessingPic.HalconWindow, MaskWidth, MaskHeight);
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
             }
         }
 
@@ -275,8 +366,8 @@ namespace shape_based_matching
                 string MaskType = (MaskType_selectedItem.Content).ToString();
                 int Radius = Convert.ToInt32(Radius_selectedItem.Content);
 
-                HObject Ho_medianImage = HD.MedianImage(HalconPic, ProcessingPic.HalconWindow, MaskType, Radius, "mirrored");
-                HOperatorSet.DispObj(Ho_medianImage, ProcessingPic.HalconWindow);
+                Global_ProcessingPic = HD.MedianImage(HalconPic, ProcessingPic.HalconWindow, MaskType, Radius, "mirrored");
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
             }
         }
 
@@ -290,9 +381,9 @@ namespace shape_based_matching
                 string filtertype = smoothImageFilter_selectedItem.Content.ToString();
                 double Alpha = Convert.ToDouble(smoothImageAlpha_selectedItem.Content);
 
-                HObject Ho_smoothImage = HD.SmoothImage(HalconPic, ProcessingPic.HalconWindow, filtertype, Alpha);
+                Global_ProcessingPic = HD.SmoothImage(HalconPic, ProcessingPic.HalconWindow, filtertype, Alpha);
 
-                HOperatorSet.DispObj(Ho_smoothImage, ProcessingPic.HalconWindow);
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
 
 
             }
@@ -306,8 +397,8 @@ namespace shape_based_matching
 
                 int MaskValue = Convert.ToInt32(binomialfilterMaskValue_selectedItem.Content);
 
-                HObject Ho_binomialfilterImage = HD.BinomialFilter(HalconPic, ProcessingPic.HalconWindow, MaskValue, MaskValue);
-                HOperatorSet.DispObj(Ho_binomialfilterImage, ProcessingPic.HalconWindow);
+                Global_ProcessingPic = HD.BinomialFilter(HalconPic, ProcessingPic.HalconWindow, MaskValue, MaskValue);
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
             }
         }
 
@@ -322,8 +413,8 @@ namespace shape_based_matching
                 int sigmaMaskValue = Convert.ToInt32(sigmaImagesigmaMaskValue_selectedItem.Content);
                 int sigmaValue = Convert.ToInt32(sigmaImageSigmaValue_selectedItem.Content);
 
-                HObject Ho_sigmaImage = HD.SigmaImage(HalconPic, ProcessingPic.HalconWindow, sigmaMaskValue, sigmaMaskValue, sigmaValue);
-                HOperatorSet.DispObj(Ho_sigmaImage, ProcessingPic.HalconWindow);
+                Global_ProcessingPic = HD.SigmaImage(HalconPic, ProcessingPic.HalconWindow, sigmaMaskValue, sigmaMaskValue, sigmaValue);
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
             }
         }
 
@@ -334,8 +425,8 @@ namespace shape_based_matching
                 ComboBoxItem gaussfiltersize_selectedItem = (ComboBoxItem)(gaussfiltersize.SelectedValue);
                 int size = Convert.ToInt32(gaussfiltersize_selectedItem.Content);
 
-                HObject Ho_gaussfilterImage = HD.GaussFilter(HalconPic, ProcessingPic.HalconWindow, size);
-                HOperatorSet.DispObj(Ho_gaussfilterImage, ProcessingPic.HalconWindow);
+                Global_ProcessingPic = HD.GaussFilter(HalconPic, ProcessingPic.HalconWindow, size);
+                HOperatorSet.DispObj(Global_ProcessingPic, ProcessingPic.HalconWindow);
             }
 
 
@@ -356,11 +447,40 @@ namespace shape_based_matching
             lock (image_lock)
             {
                 HOperatorSet.ClearWindow(ProcessingPic.HalconWindow);
-                hv_ModelId = HD.process_image(HalconPic, out ho_EdgeAmplitude, ProcessingPic.HalconID, draw_id);
+                ProcessingPic.HalconWindow.AttachBackgroundToWindow(new HImage(Global_ProcessingPic));
+                hv_ModelId = HD.process_image(Global_ProcessingPic, out ho_EdgeAmplitude, ProcessingPic.HalconID, draw_id);
             }
             // You need to switch to the UI thread to display the results
             //    Dispatcher.BeginInvoke(display_results_delegate);
             return 0;
         }
+
+
     }
+
+    public class FilterfunctionState
+    {
+        public bool meanImageState { set; get; }
+        public int meanImagemaskValue { set; get; }
+        public bool medianImageState { set; get; }
+        public string medianImagemasktype { set; get; }
+        public int medianImageradiusvalue { set; get; }
+
+        public bool smoothImageState { set; get; }
+        public string smoothImagefiltertype { set; get; }
+        public double smoothImagealpha { set; get; }
+
+        public bool binomialfilterState { set; get; }
+        public int binomialfiltermaskvalue { set; get; }
+
+        public bool sigmaImageState { set; get; }
+        public int sigmaImagemaskValue { set; get; }
+        public int sigmaImagesigmaValue { set; get; }
+
+        public bool gaussFilterState { set; get; }
+        public int gaussFiltersize { set; get; }
+
+    }
+
+ 
 }

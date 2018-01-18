@@ -17,7 +17,8 @@ using Microsoft.Win32;
 using System.Threading;
 using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
-
+using System.Xml.Serialization;
+using System.IO;
 
 namespace shape_based_matching
 {
@@ -46,13 +47,20 @@ namespace shape_based_matching
         CallBack cb;
 
         List<HTuple> drawing_objects;
+        XmlSerializer xs;
+        FilterfunctionState ReadFilterfc = new FilterfunctionState();
         public MainWindow()
         {
             InitializeComponent();
             drawing_objects = new List<HTuple>();
             cd = new List<coordinate>();
 
+            xs = new XmlSerializer(typeof(FilterfunctionState));
+            FileStream fs = new FileStream("Config.xml", FileMode.Open, FileAccess.Read);
+            ReadFilterfc = (FilterfunctionState)xs.Deserialize(fs);
+            fs.Close();
 
+ 
         }
 
        
@@ -86,6 +94,27 @@ namespace shape_based_matching
                 background_image = HD.readImage(HwindowShow.HalconWindow, ImagePath);
                 if (background_image == null)
                     return;
+                if (ReadFilterfc.binomialfilterState == true)
+                {
+                    HD.BinomialFilter(background_image, HwindowShow.HalconWindow,  ReadFilterfc.binomialfiltermaskvalue, ReadFilterfc.binomialfiltermaskvalue);
+                }
+                else if (ReadFilterfc.gaussFilterState == true)
+                {
+                    HD.GaussFilter(background_image, HwindowShow.HalconWindow, ReadFilterfc.gaussFiltersize);
+                }
+                else if (ReadFilterfc.meanImageState == true)
+                {
+                    HD.MeanImage(background_image, HwindowShow.HalconWindow, ReadFilterfc.meanImagemaskValue, ReadFilterfc.meanImagemaskValue);
+                }
+                else if (ReadFilterfc.sigmaImageState == true)
+                {
+                    HD.SigmaImage(background_image, HwindowShow.HalconWindow, ReadFilterfc.sigmaImagemaskValue, ReadFilterfc.sigmaImagemaskValue, ReadFilterfc.sigmaImagesigmaValue);
+                }
+                else if (ReadFilterfc.smoothImageState == true)
+                {
+                    HD.SmoothImage(background_image, HwindowShow.HalconWindow, ReadFilterfc.smoothImagefiltertype, ReadFilterfc.smoothImagealpha);
+                }
+                HOperatorSet.DispObj(background_image, HwindowShow.HalconWindow);
             }
             else
             {

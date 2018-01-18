@@ -191,9 +191,9 @@
                         <StackPanel >
                             <CheckBox x:Name="EnablePicProcess" Content="使用处理图片制作模板" IsChecked="True" Checked="EnablePicProcess_Checked"  />
                             <CheckBox x:Name="AutoThreshold" Content="自动二值化"   Grid.Column="0"/>
-                            <CheckBox x:Name="RecoverToDefaultPic" Content="恢复到原图" Checked="RecoverToDefaultPic_Checked"/>
-                            <CheckBox x:Name="Emphasize" Content="锐化" Checked="Emphasize_Checked"/>
-                            <Button x:Name="SaveMoudle" Content="保存模板" Click="SaveMoudle_Click"/>
+                            <CheckBox x:Name="RecoverToDefaultPic" Content="恢复到原图" Checked="RecoverToDefaultPic_Checked" Unchecked="RecoverToDefaultPic_Checked"/>
+                            <CheckBox x:Name="Emphasize" Content="锐化" Checked="Emphasize_Checked" Unchecked="Emphasize_Checked"/>
+                            <Button x:Name="SaveMoudle" Content="保存模板和图像处理方法" Click="SaveMoudle_Click"/>
                         </StackPanel>
                     </GroupBox>
 

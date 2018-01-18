@@ -778,6 +778,67 @@ public partial class HDevelopExport
         return Ho_Image;
     }
 
+    public HObject MedianImage(HObject Ho_Image,HTuple HalconWindow,string MaskType,int Radius,string margin)
+    {
+        if (Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+
+        HOperatorSet.MedianImage(Ho_Image, out Ho_Image, MaskType, Radius, margin);
+
+        return Ho_Image;
+    }
+
+    public  HObject SmoothImage(HObject Ho_Image, HTuple HalconWindow,string filterType,double Alpha)
+    {
+        if (Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+
+        HOperatorSet.SmoothImage(Ho_Image, out Ho_Image, filterType, Alpha);
+        return Ho_Image;
+    }
+
+    public HObject BinomialFilter(HObject Ho_Image, HTuple HalconWindow, int MaskWidth, int MaskHeight)
+    {
+        if(Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+
+        HOperatorSet.BinomialFilter(Ho_Image, out Ho_Image, MaskWidth, MaskHeight);
+        return Ho_Image;
+    }
+
+    public HObject SigmaImage(HObject Ho_Image, HTuple HalconWindow, int MaskWidth, int MaskHeight,int Sigma)
+    {
+        if (Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+
+        HOperatorSet.SigmaImage(Ho_Image, out Ho_Image, MaskWidth, MaskHeight, Sigma);
+        return Ho_Image;
+    }
+
+    public HObject GaussFilter(HObject Ho_Image, HTuple HalconWindow, int size)
+    {
+        if (Ho_Image == null)
+        {
+            MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
+            return null;
+        }
+
+        HOperatorSet.GaussFilter(Ho_Image, out Ho_Image, size);
+        return Ho_Image;
+
+    }
 }
 
 public class SubWindowHalconID

@@ -43,6 +43,56 @@ namespace shape_based_matching
             HOperatorSet.DispObj(HalconPic, OriginPic.HalconWindow);
             HOperatorSet.DispObj(HalconPic, ProcessingPic.HalconWindow);
             ProcessingPic.HalconWindow.AttachBackgroundToWindow(new HImage(HalconPic));
+
+            MeanImageMaskValue.SelectionChanged += MeanImageMaskValue_SelectionChanged;
+            medianImageMaskType.SelectionChanged += medianImageMaskType_SelectionChanged;
+            medianImageRadius.SelectionChanged += medianImageRadius_SelectionChanged;
+            smoothImageFilter.SelectionChanged += smoothImageFilter_SelectionChanged;
+            smoothImageAlpha.SelectionChanged += smoothImageAlpha_SelectionChanged;
+            binomialfilterMaskValue.SelectionChanged += binomialfilterMaskValue_SelectionChanged;
+            sigmaImagesigmaMaskValue.SelectionChanged += sigmaImagesigmaMaskValue_SelectionChanged;
+            sigmaImageSigmaValue.SelectionChanged += sigmaImageSigmaValue_SelectionChanged;
+            gaussfiltersize.SelectionChanged += gaussfiltersize_SelectionChanged;
+        }
+
+        private void gaussfiltersize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            gaussfilter_Checked(null, null);
+        }
+
+        private void sigmaImageSigmaValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            sigmaImage_Checked(null,null);
+        }
+
+        private void sigmaImagesigmaMaskValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            sigmaImage_Checked(null, null);
+        }
+
+        private void binomialfilterMaskValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            binomialfilter_Checked(null,null);
+        }
+
+        private void smoothImageAlpha_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            smoothImage_Checked(null,null);
+        }
+
+        private void smoothImageFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            smoothImage_Checked(null, null);
+        }
+
+        private void medianImageRadius_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            medianImage_Checked(null,null);
+        }
+
+        private void medianImageMaskType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            medianImage_Checked(null,null);
         }
 
         private void RangeSlider_UpperValueChanged(object sender, RangeParameterChangedEventArgs e)
@@ -217,27 +267,86 @@ namespace shape_based_matching
 
         private void medianImage_Checked(object sender, RoutedEventArgs e)
         {
+            if(medianImage.IsChecked == true)
+            {
+                ComboBoxItem MaskType_selectedItem = (ComboBoxItem)(medianImageMaskType.SelectedValue);
+                ComboBoxItem Radius_selectedItem = (ComboBoxItem)(medianImageRadius.SelectedValue);
 
+                string MaskType = (MaskType_selectedItem.Content).ToString();
+                int Radius = Convert.ToInt32(Radius_selectedItem.Content);
+
+                HObject Ho_medianImage = HD.MedianImage(HalconPic, ProcessingPic.HalconWindow, MaskType, Radius, "mirrored");
+                HOperatorSet.DispObj(Ho_medianImage, ProcessingPic.HalconWindow);
+            }
         }
 
         private void smoothImage_Checked(object sender, RoutedEventArgs e)
         {
+            if(smoothImage.IsChecked == true)
+            {
+                ComboBoxItem smoothImageFilter_selectedItem = (ComboBoxItem)(smoothImageFilter.SelectedValue);
+                ComboBoxItem smoothImageAlpha_selectedItem = (ComboBoxItem)(smoothImageAlpha.SelectedValue);
 
+                string filtertype = smoothImageFilter_selectedItem.Content.ToString();
+                double Alpha = Convert.ToDouble(smoothImageAlpha_selectedItem.Content);
+
+                HObject Ho_smoothImage = HD.SmoothImage(HalconPic, ProcessingPic.HalconWindow, filtertype, Alpha);
+
+                HOperatorSet.DispObj(Ho_smoothImage, ProcessingPic.HalconWindow);
+
+
+            }
         }
 
         private void binomialfilter_Checked(object sender, RoutedEventArgs e)
         {
+            if(binomialfilter.IsChecked == true)
+            {
+                ComboBoxItem binomialfilterMaskValue_selectedItem = (ComboBoxItem)(binomialfilterMaskValue.SelectedValue);
 
+                int MaskValue = Convert.ToInt32(binomialfilterMaskValue_selectedItem.Content);
+
+                HObject Ho_binomialfilterImage = HD.BinomialFilter(HalconPic, ProcessingPic.HalconWindow, MaskValue, MaskValue);
+                HOperatorSet.DispObj(Ho_binomialfilterImage, ProcessingPic.HalconWindow);
+            }
         }
 
         private void sigmaImage_Checked(object sender, RoutedEventArgs e)
         {
+            if(sigmaImage.IsChecked == true)
+            {
+                 
+                ComboBoxItem sigmaImagesigmaMaskValue_selectedItem = (ComboBoxItem)(sigmaImagesigmaMaskValue.SelectedValue);
+                ComboBoxItem sigmaImageSigmaValue_selectedItem = (ComboBoxItem)(sigmaImageSigmaValue.SelectedValue);
 
+                int sigmaMaskValue = Convert.ToInt32(sigmaImagesigmaMaskValue_selectedItem.Content);
+                int sigmaValue = Convert.ToInt32(sigmaImageSigmaValue_selectedItem.Content);
+
+                HObject Ho_sigmaImage = HD.SigmaImage(HalconPic, ProcessingPic.HalconWindow, sigmaMaskValue, sigmaMaskValue, sigmaValue);
+                HOperatorSet.DispObj(Ho_sigmaImage, ProcessingPic.HalconWindow);
+            }
         }
 
         private void gaussfilter_Checked(object sender, RoutedEventArgs e)
         {
+            if(gaussfilter.IsChecked  == true)
+            {        
+                ComboBoxItem gaussfiltersize_selectedItem = (ComboBoxItem)(gaussfiltersize.SelectedValue);
+                int size = Convert.ToInt32(gaussfiltersize_selectedItem.Content);
 
+                HObject Ho_gaussfilterImage = HD.GaussFilter(HalconPic, ProcessingPic.HalconWindow, size);
+                HOperatorSet.DispObj(Ho_gaussfilterImage, ProcessingPic.HalconWindow);
+            }
+
+
+
+        }
+
+ 
+
+        private void MeanImageMaskValue_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            meanImage_Checked(null, null);
         }
 
         protected int HDrawingObjectCallback(long draw_id, long window_handle, IntPtr type)

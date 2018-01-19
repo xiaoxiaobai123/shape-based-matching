@@ -40,6 +40,7 @@ namespace shape_based_matching
 
         FilterfunctionState Filterfc = new FilterfunctionState
         {
+            picturetype = "gray",
             meanImageState = false,
             meanImagemaskValue = 5,
 
@@ -74,6 +75,7 @@ namespace shape_based_matching
             HOperatorSet.DispObj(HalconPic, OriginPic.HalconWindow);
             HOperatorSet.DispObj(HalconPic, ProcessingPic.HalconWindow);
 
+            
             Global_ProcessingPic = HalconPic;
             ProcessingPic.HalconWindow.AttachBackgroundToWindow(new HImage(HalconPic));
 
@@ -268,14 +270,15 @@ namespace shape_based_matching
             }
         }
 
-        public PicProcess(HObject halconpic)
+        public PicProcess(HObject halconpic,string picturetype)
         {
             InitializeComponent();
             drawing_objects = new List<HTuple>();
             HalconPic = halconpic;
             cb = new CallBack(HDrawingObjectCallback);
+            Filterfc.picturetype = picturetype;
 
-            
+
         }
 
         private void EnablePicProcess_Checked(object sender, RoutedEventArgs e)
@@ -292,6 +295,8 @@ namespace shape_based_matching
                 MessageBox.Show("请先制作模板");
                 return;
             }
+
+
             Filterfc.binomialfilterState = binomialfilter.IsChecked ?? false;
             ComboBoxItem binomialfilterMaskValue_selectedItem = (ComboBoxItem)(binomialfilterMaskValue.SelectedValue);
             Filterfc.binomialfiltermaskvalue = Convert.ToInt32(binomialfilterMaskValue_selectedItem.Content);
@@ -460,6 +465,7 @@ namespace shape_based_matching
 
     public class FilterfunctionState
     {
+        public string picturetype { set; get; }
         public bool meanImageState { set; get; }
         public int meanImagemaskValue { set; get; }
         public bool medianImageState { set; get; }

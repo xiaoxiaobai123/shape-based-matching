@@ -92,9 +92,49 @@ namespace shape_based_matching
                 ImagePath = openFileDialog1.FileName;
                 
                 background_image = HD.readImage(HwindowShow.HalconWindow, ImagePath);
-                HOperatorSet.Rgb1ToGray(background_image, out background_image);
+
+                HObject bg_Red, bg_Green, bg_Blue;
+                HObject bg_H, bg_S, bg_V;
+                HOperatorSet.Decompose3(background_image, out bg_Red, out bg_Green, out bg_Blue);
+                HOperatorSet.TransFromRgb(bg_Red, bg_Green, bg_Blue, out bg_H, out bg_S, out bg_V, "hsv");
+                
+             //   HOperatorSet.Rgb1ToGray(background_image, out background_image);
                 if (background_image == null)
                     return;
+
+                if (ReadFilterfc.picturetype == "gray")
+                {
+                    HOperatorSet.Rgb1ToGray(background_image, out background_image);
+                }
+                else if (ReadFilterfc.picturetype == "R")
+                {
+                    background_image = bg_Red;
+                }
+                else if (ReadFilterfc.picturetype == "G")
+                {
+                    background_image = bg_Green;
+                }
+                else if (ReadFilterfc.picturetype == "B")
+                {
+                    background_image = bg_Blue;
+                }
+                else if (ReadFilterfc.picturetype == "H")
+                {
+                    background_image = bg_H;
+                }
+                else if (ReadFilterfc.picturetype == "S")
+                {
+                    background_image = bg_S;
+                }
+                else if (ReadFilterfc.picturetype == "V")
+                {
+                    background_image = bg_V;
+                }
+                else
+                {
+                      HOperatorSet.Rgb1ToGray(background_image, out background_image);
+                }
+
                 if (ReadFilterfc.binomialfilterState == true)
                 {
                     HD.BinomialFilter(background_image, HwindowShow.HalconWindow,  ReadFilterfc.binomialfiltermaskvalue, ReadFilterfc.binomialfiltermaskvalue);
@@ -590,7 +630,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.RedPic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.RedPic,"R");
             PictureProcess.ShowDialog();
         }
 
@@ -601,7 +641,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.GreenPic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.GreenPic,"G");
             PictureProcess.ShowDialog();
         }
 
@@ -612,7 +652,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.BluePic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.BluePic,"B");
             PictureProcess.ShowDialog();
 
         }
@@ -624,7 +664,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.ValuePic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.ValuePic,"V");
             PictureProcess.ShowDialog();
         }
 
@@ -635,7 +675,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.SaturationPic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.SaturationPic,"S");
             PictureProcess.ShowDialog();
         }
 
@@ -646,7 +686,7 @@ namespace shape_based_matching
                 MessageBox.Show("请先进行图片转换，在执行此操作！");
                 return;
             }
-            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.HuePic);
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.HuePic,"H");
             PictureProcess.ShowDialog();
         }
 

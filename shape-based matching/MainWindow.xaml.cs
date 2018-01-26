@@ -35,6 +35,7 @@ namespace shape_based_matching
 
         HObject RedPic, GreenPic, BluePic;
         HObject HuePic, SaturationPic, ValuePic;
+        HObject GrayPic;
         public static List<coordinate> cd;
         HDevelopExport HD = new HDevelopExport();
         string ImagePath;
@@ -49,6 +50,8 @@ namespace shape_based_matching
         List<HTuple> drawing_objects;
         XmlSerializer xs;
         FilterfunctionState ReadFilterfc = new FilterfunctionState();
+
+        List<FindingCoordinate> ListFcd = new List<FindingCoordinate>();
         public MainWindow()
         {
             InitializeComponent();
@@ -59,6 +62,7 @@ namespace shape_based_matching
             FileStream fs = new FileStream("Config.xml", FileMode.Open, FileAccess.Read);
             ReadFilterfc = (FilterfunctionState)xs.Deserialize(fs);
             fs.Close();
+
 
  
         }
@@ -84,7 +88,7 @@ namespace shape_based_matching
             HD.clearAllDrawingObject();
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Filter = "All files(*.*) | *.*| JPEG文件 |*.jpg*|BMP文件|*.bmp*|PNG文件|*.png*";
+            openFileDialog1.Filter = "JPEG文件 |*.jpg*|BMP文件|*.bmp*|PNG文件|*.png*";
             openFileDialog1.RestoreDirectory = true;
             openFileDialog1.FilterIndex = 1; //设置对话框属性
             if (openFileDialog1.ShowDialog() == true)
@@ -92,7 +96,8 @@ namespace shape_based_matching
                 ImagePath = openFileDialog1.FileName;
                 
                 background_image = HD.readImage(HwindowShow.HalconWindow, ImagePath);
-
+                background_image = HD.readImage(OriPicture.HalconWindow, ImagePath);
+                HOperatorSet.DispObj( background_image, OriPicture.HalconWindow);
                 HObject bg_Red, bg_Green, bg_Blue;
                 HObject bg_H, bg_S, bg_V;
                 HOperatorSet.Decompose3(background_image, out bg_Red, out bg_Green, out bg_Blue);
@@ -323,58 +328,58 @@ namespace shape_based_matching
  
  
 
-        private void RangeSlider_LowerValueChanged(object sender, RangeParameterChangedEventArgs e)
-        {
-            // RangeSli = new RangeSlider();
+        //private void RangeSlider_LowerValueChanged(object sender, RangeParameterChangedEventArgs e)
+        //{
+        //    // RangeSli = new RangeSlider();
 
 
-            try
-            {
-                GrayMinValue.Text = RangeSli.LowerValue.ToString();
-            }
-            catch(Exception ex)
-            {
-                 MessageBox.Show(ex.ToString());
-            }
-            try
-            {
-                HD.AutoModerateGray((uint)RangeSli.LowerValue, (uint)RangeSli.UpperValue);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
+        //    try
+        //    {
+        //        GrayMinValue.Text = RangeSli.LowerValue.ToString();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //         MessageBox.Show(ex.ToString());
+        //    }
+        //    try
+        //    {
+        //        HD.AutoModerateGray((uint)RangeSli.LowerValue, (uint)RangeSli.UpperValue);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString());
+        //    }
+        //}
 
-        private void RangeSlider_UpperValueChanged(object sender, RangeParameterChangedEventArgs e)
-        {
-            try
-            {
-                GrayMaxValue.Text = RangeSli.UpperValue.ToString();
-            }
-            catch(Exception ex)
-            {
-                 MessageBox.Show(ex.ToString());
-            }
-            try
-            {
-                HD.AutoModerateGray((uint)RangeSli.LowerValue, (uint)RangeSli.UpperValue);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-        }
+        //private void RangeSlider_UpperValueChanged(object sender, RangeParameterChangedEventArgs e)
+        //{
+        //    try
+        //    {
+        //        GrayMaxValue.Text = RangeSli.UpperValue.ToString();
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //         MessageBox.Show(ex.ToString());
+        //    }
+        //    try
+        //    {
+        //        HD.AutoModerateGray((uint)RangeSli.LowerValue, (uint)RangeSli.UpperValue);
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        MessageBox.Show(ex.ToString());
+        //    }
+        //}
 
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            if(AutoThreshold.IsChecked == true)
-            {
-                Thread BinaryThread = new Thread(HD.AutoThreshold);
-                BinaryThread.Start();
+        //private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        //{
+        //    if(AutoThreshold.IsChecked == true)
+        //    {
+        //        Thread BinaryThread = new Thread(HD.AutoThreshold);
+        //        BinaryThread.Start();
                  
-            }
-        }
+        //    }
+        //}
 
         private void HwindowShow_HMouseDown(object sender, HSmartWindowControlWPF.HMouseEventArgsWPF e)
         {
@@ -465,13 +470,13 @@ namespace shape_based_matching
 
  
 
-        private void MatchScoreModerate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-          //
-            MatchScoreTxt.Text = MatchScoreModerate.Value.ToString();
-            MatchingParameters.Score = MatchScoreModerate.Value;
-            OnClearAllObjects_Click(null, null);
-        }
+        //private void MatchScoreModerate_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        //{
+        //  //
+        //    MatchScoreTxt.Text = MatchScoreModerate.Value.ToString();
+        //    MatchingParameters.Score = MatchScoreModerate.Value;
+        //    OnClearAllObjects_Click(null, null);
+        //}
 
         private void Inverse_Checked(object sender, RoutedEventArgs e)
         {
@@ -705,7 +710,7 @@ namespace shape_based_matching
 
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
-            openFileDialog1.Filter = "All files(*.*) | *.*| shm文件 |*.shm* ";
+            openFileDialog1.Filter = "SHM文件 |*.shm*";
             openFileDialog1.RestoreDirectory = true;
             openFileDialog1.FilterIndex = 1; //设置对话框属性
             if (openFileDialog1.ShowDialog() == true)
@@ -778,6 +783,7 @@ namespace shape_based_matching
                     X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
                     Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
                     Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+                    Score = hv_ModelScore.TupleSelect(hv_MatchingObjIdx),
 
                 });
 
@@ -787,19 +793,190 @@ namespace shape_based_matching
                     X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
                     Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
                     Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+                    Score = hv_ModelScore.TupleSelect(hv_MatchingObjIdx),
                 });
-            }
 
-            foreach (coordinate hs in Lctest)
+
+                ListFcd.Add(new FindingCoordinate
+                {
+                    Number = (uint)hv_MatchingObjIdx + 1,
+                    X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
+                    Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+                    
+                });
+
+            }
+            coordinateGrid.ItemsSource = null;
+            coordinateGrid.ItemsSource = Lctest;
+
+            cd = Lctest;
+            for (hv_MatchingObjIdx = 0; (int)hv_MatchingObjIdx <= totalcount - 1; hv_MatchingObjIdx = (int)hv_MatchingObjIdx + 1)
             {
 
-            }
-            for (int i = 0; i < totalcount; i++)
-            {
-                // HOperatorSet.DispCircle(hv_ExpDefaultWinHandle, hv_ModelRow.TupleSelect(i), hv_ModelColumn.TupleSelect(i), 10);
-                //  HOperatorSet.GenCircle(hv_ExpDefaultWinHandle, hv_ModelRow.TupleSelect(i), hv_ModelColumn.TupleSelect(i), 10);
+                HOperatorSet.DispCross(HwindowShow.HalconWindow, hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    hv_ModelColumn.TupleSelect(hv_MatchingObjIdx), 10, hv_ModelAngle.TupleSelect(hv_MatchingObjIdx));
+
+                HOperatorSet.HomMat2dIdentity(out hv_HomMat);
+                HOperatorSet.HomMat2dIdentity(out hv_HomMat2D);
+                HOperatorSet.HomMat2dRotate(hv_HomMat, hv_ModelAngle.TupleSelect(hv_MatchingObjIdx),
+                    0, 0, out hv_HomMat);
+                HOperatorSet.HomMat2dTranslate(hv_HomMat, hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    hv_ModelColumn.TupleSelect(hv_MatchingObjIdx), out hv_HomMat);
+
+                HOperatorSet.VectorAngleToRigid(100, 100, 0, hv_ModelRow.TupleSelect(hv_MatchingObjIdx), hv_ModelColumn.TupleSelect(hv_MatchingObjIdx), hv_ModelAngle.TupleSelect(hv_MatchingObjIdx), out hv_HomMat2D);
+
+                ho_TransContours.Dispose();
+                //    HOperatorSet.AffineTransContourXld(ModelContours, out ho_TransContours, hv_HomMat);
+
+                HOperatorSet.AffineTransContourXld(ModelContours, out ho_TransContours, hv_HomMat2D);
+
+                //HOperatorSet.ClearWindow(hv_ExpDefaultWinHandle);
+                //HOperatorSet.DispObj(ho_Dog, hv_ExpDefaultWinHandle);
+
+                HOperatorSet.SetDraw(HwindowShow.HalconWindow, "fill");
+
+
+                HOperatorSet.DispObj(ho_TransContours, HwindowShow.HalconWindow);
+
+
+                HOperatorSet.SetWindowParam(HwindowShow.HalconWindow, "flush", "true");
+
+                HOperatorSet.FlushBuffer(HwindowShow.HalconWindow);
+            }            
+        }
+
+        private void coordinateGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {         
+            ContextMenu cm = this.FindResource("DataGridProcess") as ContextMenu;
+            cm.PlacementTarget = sender as Button;
+            cm.IsOpen = true;
+             
+        }
+
+
+        private void DataSave_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            CoordinateSaveInfo CSinfor = new CoordinateSaveInfo();
+            saveFileDialog1.Filter = "(*.xml) | *.xml"; // or just "txt files (*.txt)|*.txt" if you only want to save text files
+            saveFileDialog1.FilterIndex = 2;
+            saveFileDialog1.RestoreDirectory = true;
+
+            if (saveFileDialog1.ShowDialog() == true)
+            {   
+                string filename = saveFileDialog1.FileName;
+                using (FileStream fs = new FileStream(filename, FileMode.Create, FileAccess.Write))
+                {
+                    xs = new XmlSerializer(typeof(CoordinateSaveInfo));
+                    CSinfor.savingTime = DateTime.Now.ToString();                  
+                    CSinfor.TotalMatchingNumbers = uint.Parse((string)MatchingNumbers.Content);
+                    xs.Serialize(fs, CSinfor);
+                    xs = new XmlSerializer(typeof(List<FindingCoordinate>));
+                    xs.Serialize(fs, ListFcd);
+                    fs.Close();
+                    
+                }
             }
 
+   
+
+
+        }
+
+        private void GrayPicture_HMouseDown(object sender, HSmartWindowControlWPF.HMouseEventArgsWPF e)
+        {
+
+        }
+
+        private void GrayPicture_HMouseDoubleClick(object sender, HSmartWindowControlWPF.HMouseEventArgsWPF e)
+        {
+            if (SubWindowHalconID.HuePic == null)
+            {
+                MessageBox.Show("请先进行图片转换，在执行此操作！");
+                return;
+            }
+            PicProcess PictureProcess = new PicProcess(SubWindowHalconID.GrayPic, "gray");
+            PictureProcess.ShowDialog();
+        }
+
+        private void Matching_Click(object sender, RoutedEventArgs e)
+        {
+            HTuple hv_HomMat2D;
+            HTuple hv_ModelRow, hv_ModelColumn, hv_ModelAngle, hv_ModelScore;
+            HTuple hv_Deg, hv_MatchingObjIdx;
+            HTuple hv_HomMat;
+            HObject ho_TransContours = null;
+            HOperatorSet.GenEmptyObj(out ho_TransContours);
+            List<coordinate> Lctest = new List<coordinate>();
+            OnClearAllObjects_Click(null, null);
+
+            coordinateGrid.ItemsSource = null;
+            coordinateGrid.ItemsSource = Lctest;
+            MatchingNumbers.Content = Lctest.Count().ToString();
+            if (background_image == null)
+            {
+                MessageBox.Show("没有加载任何图片！");
+                return;
+            }
+            if (ModelContours == null)
+            {
+                MessageBox.Show("没有模板！");
+                return;
+            }
+            HOperatorSet.FindShapeModel(background_image, MoudleID, (new HTuple(0)).TupleRad(),
+            (new HTuple(360)).TupleRad(), MatchingParameters.Score, 0, 0.5, "least_squares", (new HTuple(2)).TupleConcat(
+            1), 0.9, out hv_ModelRow, out hv_ModelColumn, out hv_ModelAngle, out hv_ModelScore);
+
+            hv_Deg = hv_ModelAngle.TupleDeg();
+
+            HOperatorSet.SetColor(HwindowShow.HalconWindow, "red");
+            HOperatorSet.SetLineWidth(HwindowShow.HalconWindow, 3);
+
+            int totalcount = hv_ModelScore.TupleLength();
+
+
+            HOperatorSet.SetColor(HwindowShow.HalconWindow, "green");
+
+            HOperatorSet.SetLineWidth(HwindowShow.HalconWindow, 1);
+
+            for (hv_MatchingObjIdx = 0; (int)hv_MatchingObjIdx <= totalcount - 1; hv_MatchingObjIdx = (int)hv_MatchingObjIdx + 1)
+            {
+                MainWindow.cd.Add(new coordinate
+                {
+                    Number = hv_MatchingObjIdx + 1,
+                    X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
+                    Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+                    Score = hv_ModelScore.TupleSelect(hv_MatchingObjIdx),
+
+                });
+
+                Lctest.Add(new coordinate
+                {
+                    Number = hv_MatchingObjIdx + 1,
+                    X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
+                    Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+                     Score = hv_ModelScore.TupleSelect(hv_MatchingObjIdx),
+                });
+
+
+                ListFcd.Add(new FindingCoordinate
+                {
+                    Number = (uint)hv_MatchingObjIdx + 1,
+                    X = hv_ModelRow.TupleSelect(hv_MatchingObjIdx),
+                    Y = hv_ModelColumn.TupleSelect(hv_MatchingObjIdx),
+                    Angle = hv_Deg.TupleSelect(hv_MatchingObjIdx),
+
+                });
+
+            }
+            MatchingNumbers.Content = Lctest.Count().ToString();
+            coordinateGrid.ItemsSource = null;
+            coordinateGrid.ItemsSource = Lctest;
+
+            cd = Lctest;
             for (hv_MatchingObjIdx = 0; (int)hv_MatchingObjIdx <= totalcount - 1; hv_MatchingObjIdx = (int)hv_MatchingObjIdx + 1)
             {
 
@@ -833,13 +1010,14 @@ namespace shape_based_matching
 
                 HOperatorSet.FlushBuffer(HwindowShow.HalconWindow);
             }
-
-
-
- 
-      //      HOperatorSet.ClearShapeModel(hv_ModelId);
-             
         }
+
+        private void MatchingValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            MatchingParameters.Score =  (HTuple) MatchingValue.Value;
+        }
+
+   
 
         private void ConvertToRGB_Click(object sender, RoutedEventArgs e)
         {
@@ -881,6 +1059,13 @@ namespace shape_based_matching
                 if (background_image == null)
                     return;
                 HOperatorSet.DispObj(background_image, OriginalPicture.HalconWindow);
+                ConvertToRGB_Click(null, null);
+                ConvertToHSV_Click(null, null);
+
+
+                HOperatorSet.Rgb1ToGray(background_image, out GrayPic);
+                SubWindowHalconID.GrayPic = GrayPic;            
+                HD.ShowSubPic(GrayPicture.HalconWindow, GrayPic);
             }
             else
             {

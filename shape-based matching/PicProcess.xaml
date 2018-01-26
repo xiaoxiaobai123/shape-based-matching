@@ -23,203 +23,1032 @@
 
     <DockPanel>
 
-        <GroupBox Header="Operation" DockPanel.Dock="Top">
-            <StackPanel>
-                <Controls:RangeSlider x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="灰度最小值" Grid.Column="0"/>
-                    <TextBlock x:Name="GrayMinValue" Text="MinGrayValue" Grid.Column="1"/>
-                    <TextBlock Text="灰度最大值" Grid.Column="2"/>
-                    <TextBlock x:Name="GrayMaxValue" Text="MaxGrayValue" Grid.Column="3"/>
-                </Grid>
-                <Grid Margin="0,5,0,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <GroupBox Grid.Column="0" Header="Smoothing">
-                        <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+        <Controls:RangeSlider DockPanel.Dock="Top" x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
+        <Grid DockPanel.Dock="Top">
+              
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="灰度最小值" Grid.Column="0"/>
+            <TextBlock x:Name="GrayMinValue" Text="MinGrayValue" Grid.Column="1"/>
+            <TextBlock Text="灰度最大值" Grid.Column="2"/>
+            <TextBlock x:Name="GrayMaxValue" Text="MaxGrayValue" Grid.Column="3"/>
+        </Grid>
+        <Grid x:Name="PicShowWindowControl" DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
-                                </Grid.RowDefinitions>
-                                <RadioButton x:Name="meanImage" Content="meanImage" Grid.Column="0" Grid.Row="0" Checked="meanImage_Checked"/>
-                                <Label Content ="maskValue:" Grid.Column="1" Grid.Row="0"/>
-                                <ComboBox x:Name="MeanImageMaskValue" Grid.Column="2" Grid.Row="0" SelectedIndex="1" >
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="11"/>
-                                    <ComboBoxItem Content="15"/>
-                                    <ComboBoxItem Content="23"/>
-                                    <ComboBoxItem Content="31"/>
-                                    <ComboBoxItem Content="43"/>
+            <!--<DockPanel Grid.Column="1" >
+             
+             
+               
+            </DockPanel>-->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="处理图" Grid.Row="1">
+                    <HalconDotNet:HSmartWindowControlWPF   x:Name="ProcessingPic" HMouseDown="ProcessingPic_HMouseDown" />
+                </GroupBox>
+                <GroupBox Header="原图"  Grid.Row="0">
+                    <HalconDotNet:HSmartWindowControlWPF x:Name="OriginPic" />
+                </GroupBox>
+            </Grid>
+
+            <DockPanel Grid.Column="0">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="1.5*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="FirstStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>      
                                 </ComboBox>
+                            </GroupBox>
+                            <GroupBox x:Name="FirstStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <!--<RadioButton x:Name="meanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>-->
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="firstMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <RadioButton x:Name="medianImage" Content="medianImage" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
-                                <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
-                                <ComboBox x:Name="medianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
-                                    <ComboBoxItem Content="circle"/>
-                                    <ComboBoxItem Content="square"/>
+                            <GroupBox x:Name="FirstStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <!--<RadioButton x:Name="medianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />-->
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="firstmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="firstmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FirstStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <!--<RadioButton x:Name="smoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />-->
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="firstsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="firstsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FirstStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <!--<RadioButton x:Name="binomialfilter" Content="" Checked="binomialfilter_Checked" />-->
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="firstbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FirstStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <!--<RadioButton x:Name="sigmaImage" Content="" Checked="sigmaImage_Checked" />-->
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="firstsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="firstsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FirstStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <!--<RadioButton x:Name="gaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />-->
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="firstgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="SecondStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
-                                <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
-                                <ComboBox x:Name="medianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
-                                    <ComboBoxItem Content="1"/>
-                                    <ComboBoxItem Content="2"/>
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="4"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="6"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="8"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="10"/>
-                                    <ComboBoxItem Content="11"/>
-                                    <ComboBoxItem Content="12"/>
-                                    <ComboBoxItem Content="13"/>
-                                    <ComboBoxItem Content="14"/>
-                                    <ComboBoxItem Content="15"/>
+                            </GroupBox>
+                            <GroupBox x:Name="SecondStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <!--<RadioButton x:Name="secondmeanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>-->
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="secondMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="SecondStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="secondmedianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="secondmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="secondmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="SecondStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="secondsmoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="secondsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="secondsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="SecondStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="secondbinomialfilter" Content="" Checked="binomialfilter_Checked" />
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="secondbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="SecondStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="secondsigmaImage" Content="" Checked="sigmaImage_Checked" />
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="secondsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="secondsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="SecondStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="secondgaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="secondgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+                        
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="ThirdStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
+                            </GroupBox>
+                            <GroupBox x:Name="ThirdStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="thirdmeanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="thirdMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
+                            <GroupBox x:Name="ThirdStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="thirdmedianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="thirdmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="thirdmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <RadioButton x:Name="smoothImage" Content="smoothImage" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
-                                <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
-                                <ComboBox x:Name="smoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
-                                    <ComboBoxItem Content="deriche1"/>
-                                    <ComboBoxItem Content="deriche2"/>
-                                    <ComboBoxItem Content="gauss"/>
-                                    <ComboBoxItem Content="shen"/>
+                            <GroupBox x:Name="ThirdStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="thirdsmoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="thirdsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="thirdsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="ThirdStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="thirdbinomialfilter" Content="" Checked="binomialfilter_Checked" />
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="thirdbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="ThirdStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="thirdsigmaImage" Content="" Checked="sigmaImage_Checked" />
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="thirdsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="thirdsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="ThirdStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="thirdgaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="thirdgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="FourthStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
-                                <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
-                                <ComboBox x:Name="smoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
-                                    <ComboBoxItem Content="0.1"/>
-                                    <ComboBoxItem Content="0.2"/>
-                                    <ComboBoxItem Content="0.3"/>
-                                    <ComboBoxItem Content="0.5"/>
-                                    <ComboBoxItem Content="1.0"/>
-                                    <ComboBoxItem Content="1.5"/>
-                                    <ComboBoxItem Content="2.0"/>
-                                    <ComboBoxItem Content="2.5"/>
-                                    <ComboBoxItem Content="3.0"/>
-                                    <ComboBoxItem Content="4.0"/>
-                                    <ComboBoxItem Content="5.0"/>
-                                    <ComboBoxItem Content="7.0"/>
-                                    <ComboBoxItem Content="10.0"/>
+                            </GroupBox>
+                            <GroupBox x:Name="FourthStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fourthmeanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="fourthMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FourthStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fourthmedianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="fourthmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="fourthmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FourthStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fourthsmoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="fourthsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="fourthsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FourthStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fourthbinomialfilter" Content="" Checked="binomialfilter_Checked" />
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="fourthbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FourthStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fourthsigmaImage" Content="" Checked="sigmaImage_Checked" />
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="fourthsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="fourthsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FourthStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fourthgaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="fourthgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="FivethStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
+                            </GroupBox>
+                            <GroupBox x:Name="FivethStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fivethmeanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="fivethMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <RadioButton x:Name="binomialfilter" Content="binomialfilter" Grid.Column="0" Grid.Row="3" Checked="binomialfilter_Checked" />
-                                <Label  Content="MaskValue:" Grid.Column="1" Grid.Row="3"  />
-                                <ComboBox x:Name="binomialfilterMaskValue" Grid.Column="2" Grid.Row="3" SelectedIndex="0">
-                                    <ComboBoxItem Content="1"/>
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="11"/>
-                                    <ComboBoxItem Content="13"/>
-                                    <ComboBoxItem Content="15"/>
-                                    <ComboBoxItem Content="17"/>
-                                    <ComboBoxItem Content="19"/>
-                                    <ComboBoxItem Content="21"/>
-                                    <ComboBoxItem Content="23"/>
-                                    <ComboBoxItem Content="25"/>
-                                    <ComboBoxItem Content="27"/>
-                                    <ComboBoxItem Content="29"/>
-                                    <ComboBoxItem Content="31"/>
+                            <GroupBox x:Name="FivethStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fivethmedianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="fivethmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="fivethmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FivethStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="fivethsmoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="fivethsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="fivethsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FivethStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fivethbinomialfilter" Content="" Checked="binomialfilter_Checked" />
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="fivethbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FivethStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fivethsigmaImage" Content="" Checked="sigmaImage_Checked" />
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="fivethsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="fivethsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox x:Name="FivethStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="fivethgaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="fivethgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+
+                        <Grid Grid.Row="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="3*"/>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox >
+                                <ComboBox x:Name="SixthStep" SelectedIndex="0" Grid.Column="0"  >
+                                    <ComboBoxItem Content=""/>
+                                    <ComboBoxItem Content="meanImage"/>
+                                    <ComboBoxItem Content="medianImage"/>
+                                    <ComboBoxItem Content="smoothImage"/>
+                                    <ComboBoxItem Content="binomialfilter"/>
+                                    <ComboBoxItem Content="sigmaImage"/>
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
+                            </GroupBox>
+                            <GroupBox x:Name="SixthStepmeanImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="sixthmeanImage" Content=""   Checked="meanImage_Checked" Margin="0,0,5,0"/>
+                                    <TextBox Text ="maskValue:" />
+                                    <ComboBox x:Name="sixthMeanImageMaskValue"  SelectedIndex="1" >
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="31"/>
+                                        <ComboBoxItem Content="43"/>
+                                        <Button Content="sdfsdf"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <RadioButton x:Name="sigmaImage" Content="sigmaImage" Grid.Column="0" Grid.Row="4" Checked="sigmaImage_Checked" />
-                                <Label  Content="sigmaMaskValue:" Grid.Column="1" Grid.Row="4"  />
-                                <ComboBox x:Name="sigmaImagesigmaMaskValue" Grid.Column="2" Grid.Row="4" SelectedIndex="1">
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="11"/>
-                                    <ComboBoxItem Content="13"/>
-                                    <ComboBoxItem Content="15"/>
-                                </ComboBox>
+                            <GroupBox x:Name="SixthStepmedianImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="sixthmedianImage" Content="" Grid.Column="0" Grid.Row="1" Checked="medianImage_Checked" />
+                                    <Label  Content="maskType:" Grid.Column="1" Grid.Row="1"  />
+                                    <ComboBox x:Name="sixthmedianImageMaskType" Grid.Column="2" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="circle"/>
+                                        <ComboBoxItem Content="square"/>
+                                    </ComboBox>
+                                    <Label  Content="Radius:" Grid.Column="3" Grid.Row="1"  />
+                                    <ComboBox x:Name="sixthmedianImageRadius" Grid.Column="4" Grid.Row="1" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="2"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="4"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="6"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="8"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="10"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="12"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="14"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <Label  Content="SigmaValue:" Grid.Column="3" Grid.Row="4"  />
-                                <ComboBox x:Name="sigmaImageSigmaValue" Grid.Column="4" Grid.Row="4" SelectedIndex="0">
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="11"/>
-                                    <ComboBoxItem Content="13"/>
-                                    <ComboBoxItem Content="15"/>
-                                </ComboBox>
+                            <GroupBox x:Name="SixthStepsmoothImage" Grid.Column="1" Visibility="Hidden" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <RadioButton x:Name="sixsmoothImage" Content="" Grid.Column="0" Grid.Row="2" Checked="smoothImage_Checked" />
+                                    <Label  Content="Filter:" Grid.Column="1" Grid.Row="2"  />
+                                    <ComboBox x:Name="sixsmoothImageFilter" Grid.Column="2" Grid.Row="2" SelectedIndex="0">
+                                        <ComboBoxItem Content="deriche1"/>
+                                        <ComboBoxItem Content="deriche2"/>
+                                        <ComboBoxItem Content="gauss"/>
+                                        <ComboBoxItem Content="shen"/>
+                                    </ComboBox>
+                                    <Label  Content="Alpha:" Grid.Column="3" Grid.Row="2"  />
+                                    <ComboBox x:Name="sixthsmoothImageAlpha" Grid.Column="4" Grid.Row="2" SelectedIndex="3">
+                                        <ComboBoxItem Content="0.1"/>
+                                        <ComboBoxItem Content="0.2"/>
+                                        <ComboBoxItem Content="0.3"/>
+                                        <ComboBoxItem Content="0.5"/>
+                                        <ComboBoxItem Content="1.0"/>
+                                        <ComboBoxItem Content="1.5"/>
+                                        <ComboBoxItem Content="2.0"/>
+                                        <ComboBoxItem Content="2.5"/>
+                                        <ComboBoxItem Content="3.0"/>
+                                        <ComboBoxItem Content="4.0"/>
+                                        <ComboBoxItem Content="5.0"/>
+                                        <ComboBoxItem Content="7.0"/>
+                                        <ComboBoxItem Content="10.0"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                                <RadioButton x:Name="gaussfilter" Content="gaussfilter" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
-                                <Label   Content="size:" Grid.Column="1" Grid.Row="5"  />
-                                <ComboBox x:Name="gaussfiltersize" Grid.Column="2" Grid.Row="5" SelectedIndex="1">
-                                    <ComboBoxItem Content="3"/>
-                                    <ComboBoxItem Content="5"/>
-                                    <ComboBoxItem Content="7"/>
-                                    <ComboBoxItem Content="9"/>
-                                    <ComboBoxItem Content="11"/>
-                                </ComboBox>
-                            </Grid>
+                            <GroupBox x:Name="SixthStepbinomialfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="sixthbinomialfilter" Content="" Checked="binomialfilter_Checked" />
+                                    <Label  Content="MaskValue:"   />
+                                    <ComboBox x:Name="sixthbinomialfilterMaskValue" SelectedIndex="0">
+                                        <ComboBoxItem Content="1"/>
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                        <ComboBoxItem Content="17"/>
+                                        <ComboBoxItem Content="19"/>
+                                        <ComboBoxItem Content="21"/>
+                                        <ComboBoxItem Content="23"/>
+                                        <ComboBoxItem Content="25"/>
+                                        <ComboBoxItem Content="27"/>
+                                        <ComboBoxItem Content="29"/>
+                                        <ComboBoxItem Content="31"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
+                            <GroupBox x:Name="SixthStepsigmaImage" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="sixthsigmaImage" Content="" Checked="sigmaImage_Checked" />
+                                    <Label  Content="sigmaMaskValue:"   />
+                                    <ComboBox x:Name="sixthsigmaImagesigmaMaskValue" SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                    <Label  Content="SigmaValue:"   />
+                                    <ComboBox x:Name="sixthsigmaImageSigmaValue"  SelectedIndex="0">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                        <ComboBoxItem Content="13"/>
+                                        <ComboBoxItem Content="15"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
 
-                        </ScrollViewer>
-                    </GroupBox>
+                            <GroupBox x:Name="SixthStepgaussfilter" Grid.Column="1" Visibility="Hidden">
+                                <StackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="sixthgaussfilter" Content="" Grid.Column="0" Grid.Row="5" Checked="gaussfilter_Checked" />
+                                    <Label   Content="size:"   />
+                                    <ComboBox x:Name="sixthgaussfiltersize"  SelectedIndex="1">
+                                        <ComboBoxItem Content="3"/>
+                                        <ComboBoxItem Content="5"/>
+                                        <ComboBoxItem Content="7"/>
+                                        <ComboBoxItem Content="9"/>
+                                        <ComboBoxItem Content="11"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </GroupBox>
+                        </Grid>
+                    </Grid>
 
-
-                    <GroupBox Header="常规处理" Grid.Column="1" >
-                        <StackPanel >
-                            <CheckBox x:Name="EnablePicProcess" Content="使用处理图片制作模板" IsChecked="True" Checked="EnablePicProcess_Checked"  />
-                            <CheckBox x:Name="AutoThreshold" Content="自动二值化"   Grid.Column="0"/>
-                            <CheckBox x:Name="RecoverToDefaultPic" Content="恢复到原图" Checked="RecoverToDefaultPic_Checked" Unchecked="RecoverToDefaultPic_Checked"/>
-                            <CheckBox x:Name="Emphasize" Content="锐化" Checked="Emphasize_Checked" Unchecked="Emphasize_Checked"/>
-                            <Button x:Name="SaveMoudle" Content="保存模板和图像处理方法" Click="SaveMoudle_Click"/>
+                    <GroupBox Header="ROI操作" Grid.Row="1">
+                        <StackPanel>
+                            <Button Content="圆" Click="OnCircle_Click"/>
+                            <Button Content="矩形" Click="OnRectangle1_Click"/>
+                            <Button Content="椭圆" Click="OnEllipse_Click"/>
+                            <Button  Content="可变矩形" Click="OnRectangle2_Click"/>
+                            <Button  Content="清除所有ROI" Click= "OnClearAllObjects_Click"/>
+                            <Button Content="保存模板" Click="SaveMoudle_Click"/>
+                            <!--<Button Content="保存处理方法" Click=""/>-->
                         </StackPanel>
                     </GroupBox>
-
-
-
-                    <!--<CheckBox Content="">-->
                 </Grid>
-            </StackPanel>
-        </GroupBox>
-        <Grid DockPanel.Dock="Bottom">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width ="*"/>
-                <ColumnDefinition Width ="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
 
-            </Grid.RowDefinitions>
-            <GroupBox Header="原图" Grid.Column="0" Grid.Row="0">
-                <HalconDotNet:HSmartWindowControlWPF x:Name="OriginPic" />
-            </GroupBox>
-            <GroupBox Header="处理图" Grid.Column="1" Grid.Row="0">
-                <HalconDotNet:HSmartWindowControlWPF x:Name="ProcessingPic" HMouseDown="ProcessingPic_HMouseDown" />
-            </GroupBox>
+            </DockPanel>
+
+            
         </Grid>
-
 
     </DockPanel>
 

@@ -20,8 +20,21 @@ public class coordinate
     public HTuple Y { get; set; }
 
     public HTuple Angle { get; set; }
+    public HTuple Score { set; get; }
 }
-
+ public class FindingCoordinate
+{
+    public uint Number { set; get; }
+    public double X { set; get; }
+    public double Y { set; get; }
+    public double Angle { set; get; }
+    
+}
+public class CoordinateSaveInfo
+{
+    public string savingTime { set; get; }
+    public uint TotalMatchingNumbers { set; get; }
+}
 public class MatchingParameters
 {
     public  static double Score { get; set; }
@@ -141,7 +154,7 @@ public partial class HDevelopExport
     {
 
         // Initialize local and output iconic variables 
-
+        HTuple hv_Row1 = null, hv_Column1 = null, hv_Row2 = null,hv_Column2 = null;
         hv_DrawID = new HTuple();
         //Create a drawing object DrawID of the specified Type
         //and attach it to the graphics window WindowHandle
@@ -149,6 +162,8 @@ public partial class HDevelopExport
         if ((int)(new HTuple(hv_Type.TupleEqual("rectangle1"))) != 0)
         {
             HOperatorSet.CreateDrawingObjectRectangle1(300, 300, 400, 400, out hv_DrawID);
+         //   HOperatorSet.DrawRectangle1(hv_WindowHandle, out hv_Row1, out hv_Column1, out hv_Row2,out hv_Column2);
+        
         }
         else if ((int)(new HTuple(hv_Type.TupleEqual("circle"))) != 0)
         {
@@ -306,15 +321,24 @@ public partial class HDevelopExport
             }
             catch(Exception ex)
             {
-                
+                return null;
             }
             try
             {
                 ho_ModelContours.Dispose();
+                HOperatorSet.GetShapeModelContours(out ho_ModelContours, hv_ModelId, 1);
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+            try
+            {
+                
                 HOperatorSet.SetColor(hv_WindowHandle, "blue");
                 HOperatorSet.SetLineWidth(hv_WindowHandle, 1);
 
-                HOperatorSet.GetShapeModelContours(out ho_ModelContours, hv_ModelId, 1);
+                
 
                 HOperatorSet.HomMat2dIdentity(out hv_HomMat);
                 HOperatorSet.HomMat2dRotate(hv_HomMat, 0, 0, 0, out hv_HomMat);
@@ -771,75 +795,81 @@ public partial class HDevelopExport
 
     public HObject MeanImage(HObject Ho_Image,HTuple HalconWindow,int MaskWidth,int MaskHeight)
     {
+        HObject Ho_Imagereturn;
         if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
-        HOperatorSet.MeanImage(Ho_Image, out Ho_Image, MaskWidth, MaskHeight);
+        HOperatorSet.MeanImage(Ho_Image, out Ho_Imagereturn, MaskWidth, MaskHeight);
       //  HOperatorSet.DispObj(Ho_Image, HalconWindow);
-        return Ho_Image;
+        return Ho_Imagereturn;
     }
 
     public HObject MedianImage(HObject Ho_Image,HTuple HalconWindow,string MaskType,int Radius,string margin)
     {
+        HObject Ho_Imagereturn;
         if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
 
-        HOperatorSet.MedianImage(Ho_Image, out Ho_Image, MaskType, Radius, margin);
+        HOperatorSet.MedianImage(Ho_Image, out Ho_Imagereturn, MaskType, Radius, margin);
 
-        return Ho_Image;
+        return Ho_Imagereturn;
     }
 
     public  HObject SmoothImage(HObject Ho_Image, HTuple HalconWindow,string filterType,double Alpha)
     {
+        HObject Ho_Imagereturn;
         if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
 
-        HOperatorSet.SmoothImage(Ho_Image, out Ho_Image, filterType, Alpha);
-        return Ho_Image;
+        HOperatorSet.SmoothImage(Ho_Image, out Ho_Imagereturn, filterType, Alpha);
+        return Ho_Imagereturn;
     }
 
     public HObject BinomialFilter(HObject Ho_Image, HTuple HalconWindow, int MaskWidth, int MaskHeight)
     {
-        if(Ho_Image == null)
+        HObject Ho_Imagereturn;
+        if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
 
-        HOperatorSet.BinomialFilter(Ho_Image, out Ho_Image, MaskWidth, MaskHeight);
-        return Ho_Image;
+        HOperatorSet.BinomialFilter(Ho_Image, out Ho_Imagereturn, MaskWidth, MaskHeight);
+        return Ho_Imagereturn;
     }
 
     public HObject SigmaImage(HObject Ho_Image, HTuple HalconWindow, int MaskWidth, int MaskHeight,int Sigma)
     {
+        HObject Ho_Imagereturn;
         if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
 
-        HOperatorSet.SigmaImage(Ho_Image, out Ho_Image, MaskWidth, MaskHeight, Sigma);
-        return Ho_Image;
+        HOperatorSet.SigmaImage(Ho_Image, out Ho_Imagereturn, MaskWidth, MaskHeight, Sigma);
+        return Ho_Imagereturn;
     }
 
     public HObject GaussFilter(HObject Ho_Image, HTuple HalconWindow, int size)
     {
+        HObject Ho_Imagereturn = new HObject();
         if (Ho_Image == null)
         {
             MessageBox.Show(" «Îœ»º”‘ÿÕº∆¨£°");
             return null;
         }
 
-        HOperatorSet.GaussFilter(Ho_Image, out Ho_Image, size);
-        return Ho_Image;
+        HOperatorSet.GaussFilter(Ho_Imagereturn, out Ho_Image, size);
+        return Ho_Imagereturn;
 
     }
 }
@@ -856,4 +886,5 @@ public class SubWindowHalconID
     public static HObject HuePic { set; get; }
     public static HObject SaturationPic { set; get; }
     public static HObject ValuePic { set; get; }
+    public static HObject GrayPic { get; set; }
 }

@@ -1014,7 +1014,10 @@ namespace shape_based_matching
 
         private void MatchingValue_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
         {
-            MatchingParameters.Score =  (HTuple) MatchingValue.Value;
+            double score = (double)MatchingValue.Value / 100.0;
+
+            MatchingParameters.Score =  (HTuple)score;
+
         }
 
    

@@ -23,9 +23,9 @@
 
     <DockPanel>
 
-        <Controls:RangeSlider DockPanel.Dock="Top" x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
+        <Controls:RangeSlider Visibility="Hidden" DockPanel.Dock="Top" x:Name="RangeSli" LowerValue="0" SmallChange="1"  LowerValueChanged="RangeSlider_LowerValueChanged" UpperValueChanged="RangeSlider_UpperValueChanged" UpperValue="0" Minimum="0" Maximum="255" Margin="0" TickFrequency="1" IsSnapToTickEnabled="True" MinRangeWidth="0" Height="14"/>
         <Grid DockPanel.Dock="Top">
-              
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -63,12 +63,16 @@
 
             <DockPanel Grid.Column="0">
                 <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="401*"/>
+                        <ColumnDefinition Width="95*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="1.5*"/>
                     </Grid.RowDefinitions>
-                    
-                    <Grid Grid.Row="0">
+
+                    <Grid Grid.Row="0" Grid.ColumnSpan="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
@@ -90,7 +94,7 @@
                                     <ComboBoxItem Content="smoothImage"/>
                                     <ComboBoxItem Content="binomialfilter"/>
                                     <ComboBoxItem Content="sigmaImage"/>
-                                    <ComboBoxItem Content="gaussfilter"/>      
+                                    <ComboBoxItem Content="gaussfilter"/>
                                 </ComboBox>
                             </GroupBox>
                             <GroupBox x:Name="FirstStepmeanImage" Grid.Column="1" Visibility="Hidden">
@@ -394,7 +398,7 @@
                                 </StackPanel>
                             </GroupBox>
                         </Grid>
-                        
+
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
@@ -1032,7 +1036,7 @@
                         </Grid>
                     </Grid>
 
-                    <GroupBox Header="ROI操作" Grid.Row="1">
+                    <GroupBox Header="ROI操作" Grid.Row="1" Grid.ColumnSpan="2">
                         <StackPanel>
                             <Button Content="圆" Click="OnCircle_Click"/>
                             <Button Content="矩形" Click="OnRectangle1_Click"/>
@@ -1047,7 +1051,7 @@
 
             </DockPanel>
 
-            
+
         </Grid>
 
     </DockPanel>

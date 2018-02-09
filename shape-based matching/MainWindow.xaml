@@ -74,16 +74,16 @@
                         </GroupBox>
                         <Grid Grid.Row="1">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="2*"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Margin="0,0,0,2">
-                                <Button x:Name="ReadMoudle" Content=" 加载模板" Click="ReadMoudle_Click" Margin="0,0,0,1"/>
-                                <Button x:Name="ReadPic_Copy" Content="打开摄像头"  Click="ReadPic_Copy_Click" Margin="0,0,0,1" />
-                                <Button x:Name="PicClose_Copy" Content="关闭摄像头"   Click="PicClose_Copy_Click" Margin="0,0,0,1"/>
-                                <Button x:Name="ReadPic" Content="加载图片"  Click="ReadPic_Click"  Margin="0,0,0,1"/>
+                                <Button x:Name="ReadMoudle" Content=" 加载模板" FontSize="15" Click="ReadMoudle_Click" Margin="0,0,0,1"/>
+                                <Button x:Name="ReadPic_Copy" Content="打开摄像头" FontSize="15" Click="ReadPic_Copy_Click" Margin="0,0,0,1" />
+                                <Button x:Name="PicClose_Copy" Content="关闭摄像头" FontSize="15"  Click="PicClose_Copy_Click" Margin="0,0,0,1"/>
+                                <Button x:Name="ReadPic" Content="加载图片" FontSize="15"  Click="ReadPic_Click"  Margin="0,0,0,1"/>
                                 <!--<Button x:Name="Camera_screenshot" Content="截取摄像头图片"  Click="Camera_screenshot_Click" Margin="0,0,0,1"/>-->
-                                <Button x:Name="Matching" Content="加载模板匹配"  Click="Matching_Click"/>
+                                <Button x:Name="Matching" Content="加载模板匹配" FontSize="15" Click="Matching_Click"/>
                             </StackPanel>
                             <Grid Grid.Row="1"  Margin="0,2,0,0">
                                 <Grid.ColumnDefinitions>
@@ -95,7 +95,7 @@
                                     <Label Content="识别到的总数量"/>
                                 </StackPanel>
                                 <StackPanel Grid.Column="1">
-                                    <Controls:NumericUpDown x:Name="MatchingValue" Maximum="1" Interval="0.01" Minimum="0" Value="0.5" ValueChanged="MatchingValue_ValueChanged"/>
+                                    <Controls:NumericUpDown x:Name="MatchingValue" Maximum="100" Interval="1" Minimum="0" Value="50" ValueChanged="MatchingValue_ValueChanged"/>
                                     <Label x:Name="MatchingNumbers" Content="0" />
                                     
                                 </StackPanel>
@@ -172,6 +172,9 @@
             </DockPanel>
         </TabItem>
 
+        <TabItem Header="相机设置">
+            
+        </TabItem>
     </TabControl>
 
 

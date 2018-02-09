@@ -868,7 +868,7 @@ public partial class HDevelopExport
             return null;
         }
 
-        HOperatorSet.GaussFilter(Ho_Imagereturn, out Ho_Image, size);
+        HOperatorSet.GaussFilter(Ho_Image, out Ho_Imagereturn, size);
         return Ho_Imagereturn;
 
     }

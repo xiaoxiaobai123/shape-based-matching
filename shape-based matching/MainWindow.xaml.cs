@@ -19,6 +19,7 @@ using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
 using System.Xml.Serialization;
 using System.IO;
+using DirectShowLib;
 
 namespace shape_based_matching
 {
@@ -63,7 +64,9 @@ namespace shape_based_matching
             ReadFilterfc = (FilterfunctionState)xs.Deserialize(fs);
             fs.Close();
 
+            this.DataContext = new ComboxViewModel();
 
+  
  
         }
 
@@ -1110,5 +1113,25 @@ namespace shape_based_matching
     //{
     //    public double H { get; set; } = new MainWindow().HwindowShow.Height;
     //}
+
+    public class ComboxViewModel
+    {
+        public List<string> ComCamerasList { get; set; }
+      
+
+
+        public ComboxViewModel()
+        {
+            ComCamerasList = new List<string>();
+
+            DsDevice[] _SystemCamereas = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
+
+            foreach (DirectShowLib.DsDevice _Camera in _SystemCamereas)
+            {
+                ComCamerasList.Add( _Camera.Name);  
+            }
+
+        }
+    }
 
 }

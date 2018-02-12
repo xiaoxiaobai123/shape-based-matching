@@ -509,8 +509,7 @@ public partial class HDevelopExport
             }
             else
             {
-                HOperatorSet.OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb",
-            -1, "false", "default", CamearType, 0, -1, out hv_AcqHandle);
+                HOperatorSet.OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb",-1, "false", "default", CamearType, 0, -1, out hv_AcqHandle);           
             }
         }
         catch(Exception e)

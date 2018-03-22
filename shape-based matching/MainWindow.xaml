@@ -175,7 +175,7 @@
         <TabItem Header="相机设置">
             <DockPanel>
                 <StackPanel>
-                    <ComboBox x:Name="ComboBoxCameraList" ItemsSource="{Binding ComCamerasList}"  DockPanel.Dock="Top">
+                    <ComboBox x:Name="ComboBoxCameraList" ItemsSource="{Binding ComCamerasList}"  DockPanel.Dock="Top" SelectionChanged="ComboBoxCameraList_SelectionChanged">
 
                     </ComboBox>
                 </StackPanel>

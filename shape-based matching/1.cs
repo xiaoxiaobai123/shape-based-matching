@@ -499,6 +499,7 @@ public partial class HDevelopExport
         ho_Dog.Dispose();
         HOperatorSet.SetPart(hv_ExpDefaultWinHandle, 0, 0, 480  - 1, 640 - 1);
 
+        CamearType = "[0] " + ComboxCameraSelected.SelectedCamera;
         try
         {
             //HOperatorSet.OpenFramegrabber("DirectShow", 1, 1, 0, 0, 0, 0, "default", 8, "rgb",

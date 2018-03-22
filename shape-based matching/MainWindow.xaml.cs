@@ -1023,7 +1023,14 @@ namespace shape_based_matching
 
         }
 
-   
+        private void ComboBoxCameraList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+ 
+
+            ComboBoxItem ComboxCameraSelectedItem = (ComboBoxItem)(ComboBoxCameraList.SelectedValue);
+       //     ComboxCameraSelected.SelectedCamera = ComboxCameraSelectedItem.Content.ToString();
+            string ll = ComboxCameraSelectedItem.Content.ToString();
+        }
 
         private void ConvertToRGB_Click(object sender, RoutedEventArgs e)
         {
@@ -1134,4 +1141,9 @@ namespace shape_based_matching
         }
     }
 
+    public class ComboxCameraSelected
+    {
+        static public string SelectedCamera { set; get; }
+ 
+    }
 }
